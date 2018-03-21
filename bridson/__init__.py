@@ -20,9 +20,6 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
     n_dimensions = len(dims)
     assert n_dimensions <= 3
     cellsize = r / sqrt(n_dimensions)
-
-    # grid_width = int(ceil(width / cellsize))
-    # grid_height = int(ceil(height / cellsize))
     grid_shape = np.ceil(np.array(dims)/cellsize).astype(np.int)
     grid = np.empty(dims, dtype=object)
 
@@ -40,36 +37,7 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
                 continue
             if distance(p, g) <= r:
                 return False
-        
         return True
-
-    def getUniformDistributionOnAnnulus1D():
-        """Use CDF to obtain the uniform distribution on 1D annulus ranging from r 
-        to 2r.
-        """
-        if random() < 0.5:
-            sign = -1
-        else:
-            sign = 1
-        radius = r * (random()+1)
-        return radius * sign
-
-    def getUniformDistributionOnAnnulus2D():
-        """Use CDF and polar coordinates to obtain the uniform distribution on 2D 
-        annulus ranging from r to 2r.
-        """
-        phi = 2*np.pi*random()
-        radius = r * np.sqrt(3*random()+1)
-        return radius * np.array([np.cos(phi), np.sin(phi)])
-
-    def getUniformDistributionOnAnnulus3D():
-        """Use CDF and spherical coordinates to obtain the uniform distribution on
-        3D annulus ranging from r to 2r.
-        """
-        theta = np.arccos(2*random()-1)
-        phi = 2*np.pi*random()
-        radius = r * np.cbrt(7*random()+1)
-        return radius * np.array([np.cos(theta), np.sin(theta)*np.sin(phi), np.sin(theta)*np.cos(phi)])
 
     if n_dimensions == 1:
         getUniformDistributionOnAnnulus = getUniformDistributionOnAnnulus1D
@@ -89,7 +57,7 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
         queue[qi] = queue[-1]
         queue.pop()
         for _ in range(k):
-            point_p = point_q + getUniformDistributionOnAnnulus()
+            point_p = point_q + getUniformDistributionOnAnnulus(r)
             inside = np.all(0 <= point_p) and np.all(point_p < dims)
             if not inside:
                 continue
@@ -99,3 +67,27 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
             queue.append(point_p)
             grid[grid_coord] = point_p
     return [e for e in grid.ravel() if e is not None]
+
+
+
+def getUniformDistributionOnAnnulus1D(r):
+    """Use CDF to obtain the uniform distribution on 1D annulus ranging from r to 2r.
+    """
+    sign = -1 if random() < 0.5 else 1
+    radius = r * (random()+1)
+    return radius * sign
+
+def getUniformDistributionOnAnnulus2D(r):
+    """Use CDF and polar coordinates to obtain the uniform distribution on 2D annulus ranging from r to 2r.
+    """
+    phi = 2*np.pi*random()
+    radius = r * np.sqrt(3*random()+1)
+    return radius * np.array([np.cos(phi), np.sin(phi)])
+
+def getUniformDistributionOnAnnulus3D(r):
+    """Use CDF and spherical coordinates to obtain the uniform distribution on 3D annulus ranging from r to 2r.
+    """
+    theta = np.arccos(2*random()-1)
+    phi = 2*np.pi*random()
+    radius = r * np.cbrt(7*random()+1)
+    return radius * np.array([np.cos(theta), np.sin(theta)*np.sin(phi), np.sin(theta)*np.cos(phi)])
