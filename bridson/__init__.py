@@ -98,4 +98,4 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
                 continue
             queue.append(point_p)
             grid[grid_coord] = point_p
-    return grid
+    return [e for e in grid.ravel() if e is not None]
