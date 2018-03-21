@@ -8,11 +8,11 @@ with open('README.rst') as f:
 setup(
     name='bridson',
     url='http://github.com/emulbreh/bridson/',
-    version='0.1.0',
+    version='0.2.0',
     packages=find_packages(),
     license=u'MIT License',
-    author=u'Johannes Dollinger',
-    description=u'poisson disc sampling of 2-dimensional sample domain',
+    author=u'Johannes Dollinger, Hsiou-Yuan Liu',
+    description=u'poisson disc sampling of N-dimensional sample domain (N<=3)',
     long_description=description,
     classifiers=[
         'Development Status :: 3 - Alpha',
