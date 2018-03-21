@@ -1,7 +1,5 @@
 from random import random
-from math import cos, sin, floor, sqrt, pi, ceil
 import numpy as np
-import itertools
 
 
 def getEuclideanDistance(a, b):
@@ -11,15 +9,19 @@ def getEuclideanDistance(a, b):
     return np.linalg.norm(a-b)  # return an N dimensional Euclidean distance
 
 
-def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=random):
+def getPoissonDiskSamples(dims, r, k=5, distance=getEuclideanDistance, random=random):
     """
     dims: the dimensions for all sides of the n-dimensional box (e.g. (height, width) = dims in 2D)
           the units are the same as that for `r`. Can be, for example, meter or cm.
     r:    least distance between each point
+    k:    a parameter for internal for-loop that adds new point by trial
+    distance:  compute the distance of two points, default is Euclidean distance
+    random:  uniform distribution random number generator, ranging from 0.0 to 1.0
     """
+    import itertools
     n_dimensions = len(dims)
     assert n_dimensions <= 3
-    cellsize = r / sqrt(n_dimensions)
+    cellsize = r / np.sqrt(n_dimensions)
     grid_shape = np.ceil(np.array(dims)/cellsize).astype(np.int)
     grid = np.empty(dims, dtype=object)
 
@@ -68,7 +70,7 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
             grid[grid_coord] = point_p
     return [e for e in grid.ravel() if e is not None]
 
-
+poisson_disc_samples = getPoissonDiskSamples  # make compatible to older code
 
 def getUniformDistributionOnAnnulus1D(r):
     """Use CDF to obtain the uniform distribution on 1D annulus ranging from r to 2r.
