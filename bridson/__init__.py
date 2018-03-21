@@ -1,14 +1,16 @@
 from random import random
 from math import cos, sin, floor, sqrt, pi, ceil
+import numpy as np
 
 
-def euclidean_distance(a, b):
-    dx = a[0] - b[0]
-    dy = a[1] - b[1]
-    return sqrt(dx * dx + dy * dy)
+def getEuclideanDistance(a, b):
+    # dx = a[0] - b[0]
+    # dy = a[1] - b[1]
+    # return sqrt(dx * dx + dy * dy)
+    return np.linalg.norm(a-b)  # return an N dimensional Euclidean distance
 
 
-def poisson_disc_samples(width, height, r, k=5, distance=euclidean_distance, random=random):
+def poisson_disc_samples(width, height, r, k=5, distance=getEuclideanDistance, random=random):
     tau = 2 * pi
     cellsize = r / sqrt(2)
 
@@ -30,7 +32,7 @@ def poisson_disc_samples(width, height, r, k=5, distance=euclidean_distance, ran
                     return False
         return True
 
-    p = width * random(), height * random()
+    p = np.array([width * random(), height * random()])
     queue = [p]
     grid_x, grid_y = grid_coords(p)
     grid[grid_x + grid_y * grid_width] = p
@@ -47,7 +49,7 @@ def poisson_disc_samples(width, height, r, k=5, distance=euclidean_distance, ran
             py = qy + d * sin(alpha)
             if not (0 <= px < width and 0 <= py < height):
                 continue
-            p = (px, py)
+            p = np.array([px, py])
             grid_x, grid_y = grid_coords(p)
             if not fits(p, grid_x, grid_y):
                 continue
