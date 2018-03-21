@@ -78,10 +78,10 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
     elif n_dimensions == 3:
         getUniformDistributionOnAnnulus = getUniformDistributionOnAnnulus3D
 
-    p = np.array([s * random() for s in grid_shape])
-    queue = [p]
-    grid_coord = getGridCoords(p)
-    grid[grid_coord] = p
+    point_p = np.array([s * random() for s in grid_shape])
+    queue = [point_p]
+    grid_coord = getGridCoords(point_p)
+    grid[grid_coord] = point_p
 
     while queue:
         qi = int(random() * len(queue))
@@ -96,6 +96,6 @@ def poisson_disc_samples(dims, r, k=5, distance=getEuclideanDistance, random=ran
             grid_coord = getGridCoords(point_p)
             if not fits(point_p, grid_coord):
                 continue
-            queue.append(p)
-            grid[grid_coord] = p
-    return p[p!=None]
+            queue.append(point_p)
+            grid[grid_coord] = point_p
+    return grid
