@@ -23,7 +23,7 @@ def getPoissonDiskSamples(dims, r, k=5, distance=getEuclideanDistance, random=ra
     assert n_dimensions <= 3
     cellsize = r / np.sqrt(n_dimensions)
     grid_shape = np.ceil(np.array(dims)/cellsize).astype(np.int)
-    grid = np.empty(dims, dtype=object)
+    grid = np.empty(grid_shape, dtype=object)
 
     def getGridCoords(p):
         return tuple(np.floor(p/cellsize).astype(np.int))
@@ -48,7 +48,7 @@ def getPoissonDiskSamples(dims, r, k=5, distance=getEuclideanDistance, random=ra
     elif n_dimensions == 3:
         getUniformDistributionOnAnnulus = getUniformDistributionOnAnnulus3D
 
-    point_p = np.array([s * random() for s in grid_shape])
+    point_p = np.array([s * random() for s in dims])
     queue = [point_p]
     grid_coord = getGridCoords(point_p)
     grid[grid_coord] = point_p
